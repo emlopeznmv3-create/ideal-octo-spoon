@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Torneos Deportivos Escolares 2026–2027 · Secundaria</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --negro: #0d0d0d;
+    --blanco: #f5f3ef;
+    --acento: #e8c840;
+    --gris-1: #1a1a1a;
+    --gris-2: #2a2a2a;
+    --gris-3: #3d3d3d;
+    --gris-claro: #888;
+    --fut: #4ade80;
+    --vol: #60a5fa;
+    --bas: #f97316;
+    --atl: #e879f9;
+    --fem: #f43f5e;
+    --var: #3b82f6;
+    --mix: #10b981;
+    --radius: 10px;
+    --radius-lg: 16px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--negro);
+    color: var(--blanco);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: 60px 40px 50px;
+    background: var(--gris-1);
+    border-bottom: 1px solid var(--gris-2);
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(232,200,64,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(232,200,64,0.12);
+    border: 1px solid rgba(232,200,64,0.3);
+    border-radius: 999px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--acento);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--acento);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 8vw, 96px);
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    color: var(--blanco);
+    max-width: 700px;
+    margin-bottom: 8px;
+  }
+
+  .hero h1 span { color: var(--acento); }
+
+  .hero-sub {
+    font-size: 14px;
+    color: var(--gris-claro);
+    max-width: 500px;
+    margin-top: 18px;
+    font-weight: 300;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+
+  .hero-stat { }
+  .hero-stat .num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--acento);
+    line-height: 1;
+  }
+  .hero-stat .lbl {
+    font-size: 11px;
+    color: var(--gris-claro);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 2px;
+  }
+
+  .hero-deco {
+    position: absolute;
+    right: 40px;
+    top: 40px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 180px;
+    color: rgba(255,255,255,0.03);
+    line-height: 1;
+    user-select: none;
+  }
+
+  /* ─── NAV / FILTROS ─── */
+  .nav-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(13,13,13,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--gris-2);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow-x: auto;
+  }
+
+  .nav-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 0;
+    border-right: 1px solid var(--gris-2);
+    padding-right: 20px;
+    margin-right: 20px;
+  }
+  .nav-group:last-child { border-right: none; }
+
+  .nav-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--gris-claro);
+    margin-right: 8px;
+    white-space: nowrap;
+  }
+
+  .pill {
+    padding: 5px 13px;
+    border-radius: 999px;
+    border: 1px solid var(--gris-3);
+    background: transparent;
+    color: var(--gris-claro);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+    white-space: nowrap;
+  }
+
+  .pill:hover { border-color: var(--blanco); color: var(--blanco); }
+
+  .pill.active-all { background: var(--acento); border-color: var(--acento); color: var(--negro); }
+  .pill.active-fut { background: var(--fut); border-color: var(--fut); color: var(--negro); }
+  .pill.active-vol { background: var(--vol); border-color: var(--vol); color: var(--negro); }
+  .pill.active-bas { background: var(--bas); border-color: var(--bas); color: var(--negro); }
+  .pill.active-atl { background: var(--atl); border-color: var(--atl); color: var(--negro); }
+  .pill.active-fem { background: var(--fem); border-color: var(--fem); color: white; }
+  .pill.active-var { background: var(--var); border-color: var(--var); color: white; }
+  .pill.active-mix { background: var(--mix); border-color: var(--mix); color: var(--negro); }
+
+  /* ─── MAIN ─── */
+  .main { padding: 40px 40px 80px; max-width: 1200px; margin: 0 auto; }
+
+  /* ─── LEYENDA ─── */
+  .leyenda {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+    padding: 16px 20px;
+    background: var(--gris-1);
+    border-radius: var(--radius);
+    border: 1px solid var(--gris-2);
+  }
+  .ley-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--gris-claro); }
+  .ley-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ─── TIMELINE ─── */
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+
+  .mes-bloque { margin-bottom: 2px; }
+
+  .mes-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 0 10px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .mes-linea {
+    height: 1px;
+    flex: 1;
+    background: var(--gris-2);
+  }
+
+  .mes-titulo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.06em;
+    color: var(--gris-claro);
+    white-space: nowrap;
+    transition: color 0.2s;
+  }
+
+  .mes-bloque:hover .mes-titulo { color: var(--blanco); }
+
+  .mes-count {
+    font-size: 11px;
+    color: var(--gris-3);
+    background: var(--gris-2);
+    padding: 2px 8px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 12px;
+    padding-bottom: 16px;
+  }
+
+  /* ─── CARD ─── */
+  .event-card {
+    background: var(--gris-1);
+    border: 1px solid var(--gris-2);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: default;
+  }
+
+  .event-card:hover {
+    border-color: var(--gris-3);
+    transform: translateY(-2px);
+  }
+
+  .event-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+
+  .card-fut::before { background: var(--fut); }
+  .card-vol::before { background: var(--vol); }
+  .card-bas::before { background: var(--bas); }
+  .card-atl::before { background: var(--atl); }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .card-sport-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .icon-fut { background: rgba(74,222,128,0.12); }
+  .icon-vol { background: rgba(96,165,250,0.12); }
+  .icon-bas { background: rgba(249,115,22,0.12); }
+  .icon-atl { background: rgba(232,121,249,0.12); }
+
+  .card-fecha {
+    font-size: 11px;
+    color: var(--gris-claro);
+    text-align: right;
+    line-height: 1.4;
+    font-weight: 300;
+  }
+
+  .card-nombre {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--blanco);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+
+  .card-detalle {
+    font-size: 12px;
+    color: var(--gris-claro);
+    margin-bottom: 12px;
+    font-weight: 300;
+  }
+
+  .card-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .tag-fem { background: rgba(244,63,94,0.15); color: #fb7185; border: 1px solid rgba(244,63,94,0.25); }
+  .tag-var { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.25); }
+  .tag-mix { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.25); }
+  .tag-fase {
+    background: rgba(232,200,64,0.1);
+    color: var(--acento);
+    border: 1px solid rgba(232,200,64,0.2);
+  }
+
+  .card-fase-badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    font-size: 10px;
+    color: var(--acento);
+    background: rgba(232,200,64,0.08);
+    border: 1px solid rgba(232,200,64,0.18);
+    border-radius: 999px;
+    padding: 2px 8px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  /* ocultar por filtro */
+  .event-card.hidden { display: none; }
+  .mes-bloque.hidden-mes { display: none; }
+
+  /* ─── EMPTY STATE ─── */
+  .empty-state {
+    display: none;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--gris-claro);
+  }
+  .empty-state.show { display: block; }
+  .empty-state p { font-size: 14px; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--gris-1);
+    border-top: 1px solid var(--gris-2);
+    padding: 32px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .footer-left { font-size: 12px; color: var(--gris-claro); line-height: 1.7; }
+  .footer-left strong { color: var(--blanco); font-weight: 500; }
+
+  .footer-right {
+    display: flex;
+    gap: 20px;
+  }
+  .footer-legend { font-size: 11px; color: var(--gris-3); }
+  .footer-legend span { color: var(--gris-claro); }
+
+  /* ─── FAIR PLAY SECTION ─── */
+  .seccion-titulo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 0.04em;
+    color: var(--blanco);
+    margin-bottom: 20px;
+    margin-top: 48px;
+  }
+
+  .seccion-titulo span { color: var(--acento); }
+
+  .fairplay-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+    margin-bottom: 48px;
+  }
+
+  .fp-card {
+    background: var(--gris-1);
+    border: 1px solid var(--gris-2);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .fp-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: rgba(232,200,64,0.3);
+    line-height: 1;
+    flex-shrink: 0;
+    width: 28px;
+  }
+
+  .fp-content {}
+  .fp-titulo { font-size: 13px; font-weight: 600; color: var(--blanco); margin-bottom: 3px; }
+  .fp-desc { font-size: 12px; color: var(--gris-claro); font-weight: 300; line-height: 1.5; }
+
+  /* ─── TABLA RESUMEN ─── */
+  .tabla-wrap {
+    overflow-x: auto;
+    margin-bottom: 48px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    min-width: 600px;
+  }
+
+  thead tr {
+    border-bottom: 1px solid var(--gris-2);
+  }
+
+  thead th {
+    text-align: left;
+    padding: 10px 14px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--gris-claro);
+    font-weight: 500;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid var(--gris-2);
+    transition: background 0.15s;
+  }
+
+  tbody tr:hover { background: var(--gris-1); }
+
+  tbody td {
+    padding: 12px 14px;
+    color: var(--blanco);
+    vertical-align: top;
+  }
+
+  .td-sport {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sport-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 680px) {
+    .hero { padding: 40px 20px 36px; }
+    .hero-deco { display: none; }
+    .nav-wrap { padding: 0 16px; }
+    .main { padding: 28px 16px 60px; }
+    footer { padding: 24px 20px; }
+    .hero-stats { gap: 20px; }
+  }
+
+  @media print {
+    .nav-wrap { position: static; }
+    .event-card { break-inside: avoid; }
+    .hero::before { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-deco">2026</div>
+  <div class="hero-badge">Ciclo escolar 2026–2027</div>
+  <h1>Torneos<br><span>Deportivos</span><br>Secundaria</h1>
+  <p class="hero-sub">Calendario tentativo de competencias escolares en fútbol, voleibol, basquetbol y atletismo. Categorías femenil, varonil y mixto.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">4</div><div class="lbl">Disciplinas</div></div>
+    <div class="hero-stat"><div class="num">3</div><div class="lbl">Categorías</div></div>
+    <div class="hero-stat"><div class="num">20</div><div class="lbl">Torneos</div></div>
+    <div class="hero-stat"><div class="num">2</div><div class="lbl">Semestres</div></div>
+  </div>
+</header>
+
+<!-- NAV FILTROS -->
+<nav class="nav-wrap">
+  <div class="nav-group">
+    <span class="nav-label">Deporte</span>
+    <button class="pill active-all" onclick="filtrar('deporte','todos')">Todos</button>
+    <button class="pill" onclick="filtrar('deporte','fut')">Fútbol</button>
+    <button class="pill" onclick="filtrar('deporte','vol')">Voleibol</button>
+    <button class="pill" onclick="filtrar('deporte','bas')">Basquetbol</button>
+    <button class="pill" onclick="filtrar('deporte','atl')">Atletismo</button>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Categoría</span>
+    <button class="pill active-all" onclick="filtrar('cat','todas')">Todas</button>
+    <button class="pill" onclick="filtrar('cat','fem')">Femenil</button>
+    <button class="pill" onclick="filtrar('cat','var')">Varonil</button>
+    <button class="pill" onclick="filtrar('cat','mix')">Mixto</button>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+  <!-- Leyenda -->
+  <div class="leyenda">
+    <div class="ley-item"><div class="ley-dot" style="background:var(--fut)"></div>Fútbol</div>
+    <div class="ley-item"><div class="ley-dot" style="background:var(--vol)"></div>Voleibol</div>
+    <div class="ley-item"><div class="ley-dot" style="background:var(--bas)"></div>Basquetbol</div>
+    <div class="ley-item"><div class="ley-dot" style="background:var(--atl)"></div>Atletismo</div>
+    <div class="ley-item"><div class="ley-dot" style="background:var(--fem)"></div>Femenil</div>
+    <div class="ley-item"><div class="ley-dot" style="background:var(--var)"></div>Varonil</div>
+    <div class="ley-item"><div class="ley-dot" style="background:var(--mix)"></div>Mixto</div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="timeline" id="timeline"></div>
+
+  <div class="empty-state" id="empty">
+    <p>No hay torneos que coincidan con los filtros seleccionados.</p>
+  </div>
+
+  <!-- Tabla resumen disciplinas -->
+  <div class="seccion-titulo">Resumen de <span>disciplinas</span></div>
+  <div class="tabla-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Deporte</th>
+          <th>Formato</th>
+          <th>Categorías</th>
+          <th>Fases</th>
+          <th>Duración aprox.</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="td-sport"><div class="sport-dot" style="background:var(--fut)"></div>Fútbol 7</div></td>
+          <td>Grupos + eliminación directa</td>
+          <td>Femenil · Varonil</td>
+          <td>Fase de grupos → Semifinal → Final</td>
+          <td>4 semanas</td>
+        </tr>
+        <tr>
+          <td><div class="td-sport"><div class="sport-dot" style="background:var(--vol)"></div>Voleibol</div></td>
+          <td>Round robin + llaves</td>
+          <td>Femenil · Varonil · Mixto</td>
+          <td>Round robin → Cuartos → Semifinal → Final</td>
+          <td>3 semanas</td>
+        </tr>
+        <tr>
+          <td><div class="td-sport"><div class="sport-dot" style="background:var(--bas)"></div>Basquetbol 3x3</td>
+          <td>Grupos + eliminación directa</td>
+          <td>Femenil · Varonil · Mixto</td>
+          <td>Fase de grupos → Semifinal → Final</td>
+          <td>3 semanas</td>
+        </tr>
+        <tr>
+          <td><div class="td-sport"><div class="sport-dot" style="background:var(--atl)"></div>Atletismo</div></td>
+          <td>Competencia por marcas</td>
+          <td>Femenil · Varonil · Mixto (relevos)</td>
+          <td>Clasificatorio → Final</td>
+          <td>2 semanas</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Fair Play -->
+  <div class="seccion-titulo">Principios de <span>juego limpio</span></div>
+  <div class="fairplay-grid">
+    <div class="fp-card">
+      <div class="fp-num">01</div>
+      <div class="fp-content">
+        <div class="fp-titulo">Respeto al rival</div>
+        <div class="fp-desc">Saludo obligatorio al inicio y cierre de cada encuentro. Conducta agresiva implica descalificación inmediata.</div>
+      </div>
+    </div>
+    <div class="fp-card">
+      <div class="fp-num">02</div>
+      <div class="fp-content">
+        <div class="fp-titulo">Participación garantizada</div>
+        <div class="fp-desc">Cada integrante juega al menos un periodo por torneo, independientemente de su nivel técnico.</div>
+      </div>
+    </div>
+    <div class="fp-card">
+      <div class="fp-num">03</div>
+      <div class="fp-content">
+        <div class="fp-titulo">Árbitros designados</div>
+        <div class="fp-desc">Cada partido contará con árbitro institucional. Las disputas se resuelven en junta de capitanes.</div>
+      </div>
+    </div>
+    <div class="fp-card">
+      <div class="fp-num">04</div>
+      <div class="fp-content">
+        <div class="fp-titulo">Puntualidad</div>
+        <div class="fp-desc">Presentación 15 minutos antes. El incumplimiento reiterado descuenta puntos en la tabla de fair play.</div>
+      </div>
+    </div>
+    <div class="fp-card">
+      <div class="fp-num">05</div>
+      <div class="fp-content">
+        <div class="fp-titulo">Tabla de fair play</div>
+        <div class="fp-desc">Se puntúa comportamiento, puntualidad y trabajo en equipo. El mejor equipo recibe reconocimiento en clausura.</div>
+      </div>
+    </div>
+    <div class="fp-card">
+      <div class="fp-num">06</div>
+      <div class="fp-content">
+        <div class="fp-titulo">Premiación inclusiva</div>
+        <div class="fp-desc">Se reconoce a campeón, subcampeón y tercer lugar de cada categoría y disciplina. Mención especial por fair play.</div>
+      </div>
+    </div>
+    <div class="fp-card">
+      <div class="fp-num">07</div>
+      <div class="fp-content">
+        <div class="fp-titulo">Uniformes y equipo</div>
+        <div class="fp-desc">Uniforme completo obligatorio. Equipo de protección requerido donde aplique (rodilleras, etc.).</div>
+      </div>
+    </div>
+    <div class="fp-card">
+      <div class="fp-num">08</div>
+      <div class="fp-content">
+        <div class="fp-titulo">Inclusión de género</div>
+        <div class="fp-desc">Las categorías mixtas se diseñan para garantizar la equidad de participación entre géneros.</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <strong>Torneos Deportivos Escolares 2026–2027 · Nivel Secundaria</strong><br>
+    Fechas tentativas sujetas a modificación. El coordinador deportivo comunicará cualquier cambio con anticipación.
+  </div>
+  <div class="footer-right">
+    <div class="footer-legend">Ciclo <span>Ago 2026 – Jun 2027</span></div>
+  </div>
+</footer>
+
+<script>
+const eventos = [
+  // AGOSTO 2026
+  { id:1, mes:'Agosto 2026', nombre:'Copa Apertura — Fútbol 7', deporte:'fut', cats:['fem','var'], fase:'Fase de grupos', fechas:'17 – 28 ago', detalle:'Primer torneo del ciclo. Formato de grupos con 4 equipos por zona.' },
+  { id:2, mes:'Agosto 2026', nombre:'Clasificatorio Atletismo', deporte:'atl', cats:['fem','var','mix'], fase:'Clasificatorio', fechas:'24 – 28 ago', detalle:'Velocidad 60m, 100m y relevos 4×100. Primer corte de marcas.' },
+
+  // SEPTIEMBRE 2026
+  { id:3, mes:'Septiembre 2026', nombre:'Torneo Voleibol — Fase inicial', deporte:'vol', cats:['fem','var'], fase:'Round robin', fechas:'7 – 18 sep', detalle:'Formato round robin. Tres sets a 25 puntos.' },
+  { id:4, mes:'Septiembre 2026', nombre:'Copa Fútbol 7 — Semifinal', deporte:'fut', cats:['fem','var'], fase:'Semifinal', fechas:'21 – 25 sep', detalle:'Los dos mejores de cada zona avanzan a semifinales.' },
+
+  // OCTUBRE 2026
+  { id:5, mes:'Octubre 2026', nombre:'Final Copa Apertura — Fútbol 7', deporte:'fut', cats:['fem','var'], fase:'Final', fechas:'5 – 9 oct', detalle:'Gran final con ceremonias de premiación.' },
+  { id:6, mes:'Octubre 2026', nombre:'Torneo Basquetbol 3×3 — Apertura', deporte:'bas', cats:['fem','var','mix'], fase:'Fase de grupos', fechas:'12 – 23 oct', detalle:'Cancha media. Juego a 21 puntos o 10 minutos.' },
+  { id:7, mes:'Octubre 2026', nombre:'Final Voleibol — Fase inicial', deporte:'vol', cats:['fem','var'], fase:'Final', fechas:'26 – 30 oct', detalle:'Mejores cuatro equipos disputan el título del primer torneo.' },
+
+  // NOVIEMBRE 2026
+  { id:8, mes:'Noviembre 2026', nombre:'Olimpiada de Atletismo', deporte:'atl', cats:['fem','var','mix'], fase:'Final', fechas:'9 – 13 nov', detalle:'100m, 400m, salto de longitud, lanzamiento de disco y relevos 4×400.' },
+  { id:9, mes:'Noviembre 2026', nombre:'Final Basquetbol 3×3 — Apertura', deporte:'bas', cats:['fem','var','mix'], fase:'Final', fechas:'23 – 27 nov', detalle:'Semifinales y final del torneo de apertura. Entrega de trofeos.' },
+
+  // ENERO 2027
+  { id:10, mes:'Enero 2027', nombre:'Copa Invernal — Fútbol 7', deporte:'fut', cats:['fem','var'], fase:'Fase de grupos', fechas:'11 – 22 ene', detalle:'Segundo torneo de fútbol. Equipos reorganizados tras el primer semestre.' },
+  { id:11, mes:'Enero 2027', nombre:'Voleibol Mixto — Copa Amistad', deporte:'vol', cats:['mix'], fase:'Round robin', fechas:'18 – 29 ene', detalle:'Equipos mixtos de seis integrantes. Fomento a la convivencia escolar.' },
+
+  // FEBRERO 2027
+  { id:12, mes:'Febrero 2027', nombre:'Final Copa Invernal — Fútbol 7', deporte:'fut', cats:['fem','var'], fase:'Final', fechas:'8 – 19 feb', detalle:'Semifinales y final. Doble jornada en jornadas de viernes.' },
+  { id:13, mes:'Febrero 2027', nombre:'Torneo Voleibol — Segunda vuelta', deporte:'vol', cats:['fem','var'], fase:'Round robin', fechas:'15 – 26 feb', detalle:'Los equipos juegan contra rivales distintos al primer semestre.' },
+
+  // MARZO 2027
+  { id:14, mes:'Marzo 2027', nombre:'Final Voleibol Mixto', deporte:'vol', cats:['mix'], fase:'Final', fechas:'1 – 5 mar', detalle:'Rondas eliminatorias y gran final de la Copa Amistad.' },
+  { id:15, mes:'Marzo 2027', nombre:'Basquetbol 3×3 — Copa Clausura', deporte:'bas', cats:['fem','var','mix'], fase:'Fase de grupos', fechas:'8 – 19 mar', detalle:'Segundo torneo de basquetbol. Equipos nuevos permitidos.' },
+  { id:16, mes:'Marzo 2027', nombre:'Final Voleibol — Segunda vuelta', deporte:'vol', cats:['fem','var'], fase:'Final', fechas:'22 – 26 mar', detalle:'Llaves de cuartos, semifinal y gran final de la segunda vuelta.' },
+
+  // ABRIL 2027
+  { id:17, mes:'Abril 2027', nombre:'Final Basquetbol — Copa Clausura', deporte:'bas', cats:['fem','var','mix'], fase:'Final', fechas:'12 – 23 abr', detalle:'Semifinal y final. Premiación por categoría.' },
+  { id:18, mes:'Abril 2027', nombre:'Cross Escolar — Fondo y medio fondo', deporte:'atl', cats:['fem','var','mix'], fase:'Final', fechas:'26 – 30 abr', detalle:'Recorridos de 1 000m, 2 000m y 3 000m en patio o área verde del plantel.' },
+
+  // MAYO–JUNIO 2027
+  { id:19, mes:'Mayo – Junio 2027', nombre:'Juegos Escolares de Clausura', deporte:'fut', cats:['fem','var','mix'], fase:'Final', fechas:'3 – 14 may', detalle:'Torneo relámpago de fútbol. Todos los grupos participan. Equipos inter-grado.' },
+  { id:20, mes:'Mayo – Junio 2027', nombre:'Gran Final y Ceremonia de Clausura', deporte:'atl', cats:['fem','var','mix'], fase:'Final', fechas:'28 may – 4 jun', detalle:'Competencia de relevos, exhibición deportiva y premiación general del ciclo.' },
+];
+
+const CONFIG_DEPORTE = {
+  fut: { icon:'⚽', iconClass:'icon-fut', cardClass:'card-fut', label:'Fútbol 7' },
+  vol: { icon:'🏐', iconClass:'icon-vol', cardClass:'card-vol', label:'Voleibol' },
+  bas: { icon:'🏀', iconClass:'icon-bas', cardClass:'card-bas', label:'Basquetbol 3×3' },
+  atl: { icon:'🏃', iconClass:'icon-atl', cardClass:'card-atl', label:'Atletismo' },
+};
+
+const CONFIG_CAT = {
+  fem: { label:'Femenil', tagClass:'tag-fem' },
+  var: { label:'Varonil', tagClass:'tag-var' },
+  mix: { label:'Mixto',   tagClass:'tag-mix' },
+};
+
+let filtroDeporte = 'todos';
+let filtroCat = 'todas';
+
+function buildTimeline() {
+  const timeline = document.getElementById('timeline');
+  timeline.innerHTML = '';
+  const meses = [...new Set(eventos.map(e => e.mes))];
+
+  meses.forEach(mes => {
+    const bloque = document.createElement('div');
+    bloque.className = 'mes-bloque';
+    bloque.dataset.mes = mes;
+
+    bloque.innerHTML = `
+      <div class="mes-header">
+        <div class="mes-linea"></div>
+        <div class="mes-titulo">${mes.toUpperCase()}</div>
+        <div class="mes-count" id="count-${mes.replace(/[^a-z0-9]/gi,'_')}"></div>
+        <div class="mes-linea"></div>
+      </div>
+      <div class="events-grid" id="grid-${mes.replace(/[^a-z0-9]/gi,'_')}"></div>
+    `;
+    timeline.appendChild(bloque);
+  });
+
+  renderCards();
+}
+
+function renderCards() {
+  const meses = [...new Set(eventos.map(e => e.mes))];
+  let totalVisible = 0;
+
+  meses.forEach(mes => {
+    const mesId = mes.replace(/[^a-z0-9]/gi,'_');
+    const grid = document.getElementById('grid-' + mesId);
+    const countEl = document.getElementById('count-' + mesId);
+    if (!grid) return;
+    grid.innerHTML = '';
+    let visible = 0;
+
+    eventos.filter(e => e.mes === mes).forEach(e => {
+      const matchD = filtroDeporte === 'todos' || e.deporte === filtroDeporte;
+      const matchC = filtroCat === 'todas' || e.cats.includes(filtroCat);
+      if (!matchD || !matchC) return;
+
+      const cfg = CONFIG_DEPORTE[e.deporte];
+      const catTags = e.cats.map(c => `<span class="tag ${CONFIG_CAT[c].tagClass}">${CONFIG_CAT[c].label}</span>`).join('');
+
+      const card = document.createElement('div');
+      card.className = `event-card ${cfg.cardClass}`;
+      card.innerHTML = `
+        <div class="card-top">
+          <div class="card-sport-icon ${cfg.iconClass}">${cfg.icon}</div>
+          <div class="card-fecha">${e.fechas}</div>
+        </div>
+        <div class="card-nombre">${e.nombre}</div>
+        <div class="card-detalle">${e.detalle}</div>
+        <div class="card-tags">
+          ${catTags}
+          <span class="tag tag-fase">${e.fase}</span>
+        </div>
+      `;
+      grid.appendChild(card);
+      visible++;
+      totalVisible++;
+    });
+
+    const bloque = document.querySelector(`.mes-bloque[data-mes="${mes}"]`);
+    if (visible === 0) {
+      bloque.classList.add('hidden-mes');
+      countEl.textContent = '';
+    } else {
+      bloque.classList.remove('hidden-mes');
+      countEl.textContent = `${visible} evento${visible>1?'s':''}`;
+    }
+  });
+
+  const empty = document.getElementById('empty');
+  empty.classList.toggle('show', totalVisible === 0);
+
+  // actualizar pills
+  actualizarPills();
+}
+
+function filtrar(tipo, valor) {
+  if (tipo === 'deporte') filtroDeporte = valor;
+  if (tipo === 'cat') filtroCat = valor;
+  renderCards();
+}
+
+function actualizarPills() {
+  document.querySelectorAll('.nav-wrap .pill').forEach(btn => {
+    // quitar todos los active-*
+    btn.className = 'pill';
+  });
+  // deporte
+  const pillsDeporte = document.querySelectorAll('.nav-group:nth-child(1) .pill');
+  const mapD = ['todos','fut','vol','bas','atl'];
+  const mapDClass = ['active-all','active-fut','active-vol','active-bas','active-atl'];
+  pillsDeporte.forEach((btn, i) => {
+    if (mapD[i] === filtroDeporte) btn.classList.add(mapDClass[i]);
+  });
+  // cat
+  const pillsCat = document.querySelectorAll('.nav-group:nth-child(2) .pill');
+  const mapC = ['todas','fem','var','mix'];
+  const mapCClass = ['active-all','active-fem','active-var','active-mix'];
+  pillsCat.forEach((btn, i) => {
+    if (mapC[i] === filtroCat) btn.classList.add(mapCClass[i]);
+  });
+}
+
+buildTimeline();
+</script>
+</body>
+</html>
